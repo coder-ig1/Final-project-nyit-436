@@ -5,14 +5,30 @@ import matplotlib.pyplot as plt
 from pyspark.sql.functions import col, when
 from pyspark.sql.types import DoubleType ,IntegerType
 from sklearn.ensemble import IsolationForest
+import requests
+from io import StringIO
 
 # Create a SparkSession
 spark = ps.SparkSession.builder.appName("CybersecurityAnalysis").getOrCreate()
 
 # Read the CSV files using Spark
-training = spark.read.csv('data/labelled_training_data.csv', header=True, inferSchema=True)
-testing = spark.read.csv('data/labelled_testing_data.csv', header=True, inferSchema=True)
-validation = spark.read.csv('data/labelled_validation_data.csv', header=True, inferSchema=True)
+training_url = 'https://raw.githubusercontent.com/coder-ig1/Final-project-nyit-436/master/data/labelled_training_data.csv'
+testing_url = 'https://raw.githubusercontent.com/coder-ig1/Final-project-nyit-436/master/data/labelled_testing_data.csv'
+validation_url = 'https://raw.githubusercontent.com/coder-ig1/Final-project-nyit-436/master/data/labelled_validation_data.csv'
+
+# Download the CSV files using requests and StringIO
+training_response = requests.get(training_url).text
+testing_response = requests.get(testing_url).text
+validation_response = requests.get(validation_url).text
+
+training_csv = StringIO(training_response)
+testing_csv = StringIO(testing_response)
+validation_csv = StringIO(validation_response)
+
+# Read the CSV files using Spark
+training = spark.read.csv(training_csv, header=True, inferSchema=True)
+testing = spark.read.csv(testing_csv, header=True, inferSchema=True)
+validation = spark.read.csv(validation_csv, header=True, inferSchema=True)
 training.printSchema()
 training.show(5)
 # Define the function to prepare the dataset
@@ -122,5 +138,6 @@ y_pred_testing = test_isolation_forest(pandas_testing)
 y_pred_validation = test_isolation_forest(pandas_validation)
 #compare the predictions to the actual values
 print(compare_predictions(pandas_testing,convert_predictions(y_pred_testing)))
+print(compare_predictions(pandas_validation,convert_predictions(y_pred_validation)))
 # Stop the SparkSession
 spark.stop()

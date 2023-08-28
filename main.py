@@ -120,44 +120,7 @@ def compare_predictions(true_data: pd.DataFrame,predicted_data: pd.DataFrame):
     return accuracy
 y_pred_testing = test_isolation_forest(pandas_testing)
 y_pred_validation = test_isolation_forest(pandas_validation)
-print(y_pred_testing)
-print(y_pred_validation)
-
 #compare the predictions to the actual values
 print(compare_predictions(pandas_testing,convert_predictions(y_pred_testing)))
-#print the 1 values
-
-# Stop the SparkSession
-
-
-""" 
-# Show the first 5 rows of the data
-training.show(5)
-testing.show(5)
-validation.show(5)
-#print datatype of each row
-training.printSchema()
-# Calculate the correlation matrix
-# Convert to a Pandas DataFrame for plotting
-#convert sus to a numeric value from string
-
-training = training.withColumn("sus", training["sus"].cast("int"))
-corr_matrix = training.toPandas().corr(numeric_only=True)
-
-# Plot the correlation matrix heatmap
-# use between -1 and 1 for the colorbar
-plt.imshow(corr_matrix, cmap='RdBu', vmin=-1, vmax=1)
-plt.colorbar()
-plt.xticks(np.arange(len(corr_matrix.columns)), corr_matrix.columns, rotation=90)
-plt.yticks(np.arange(len(corr_matrix.columns)), corr_matrix.columns)
-plt.show()
- #drop event name because it is the same as event id
-training = training.drop("event_name")
-#drop hostname because it is just the name of the computer
-training = training.drop("hostname")
-#drop process id because it is highly corrilated to event thread id
-training = training.drop("process_id")
- """
-
 # Stop the SparkSession
 spark.stop()

@@ -12,9 +12,9 @@ from io import StringIO
 spark = ps.SparkSession.builder.appName("CybersecurityAnalysis").getOrCreate()
 
 # Read the CSV files using Spark
-training_url = 'https://raw.githubusercontent.com/coder-ig1/Final-project-nyit-436/master/data/labelled_training_data.csv'
-testing_url = 'https://raw.githubusercontent.com/coder-ig1/Final-project-nyit-436/master/data/labelled_testing_data.csv'
-validation_url = 'https://raw.githubusercontent.com/coder-ig1/Final-project-nyit-436/master/data/labelled_validation_data.csv'
+training_url = 'https://media.githubusercontent.com/media/coder-ig1/Final-project-nyit-436/main/data/labelled_training_data.csv'
+testing_url = 'https://media.githubusercontent.com/media/coder-ig1/Final-project-nyit-436/main/data/labelled_testing_data.csv'
+validation_url = 'https://media.githubusercontent.com/media/coder-ig1/Final-project-nyit-436/main/data/labelled_validation_data.csv'
 
 # Download the CSV files using requests and StringIO
 training_response = requests.get(training_url).text
@@ -25,7 +25,6 @@ training_csv = StringIO(training_response)
 testing_csv = StringIO(testing_response)
 validation_csv = StringIO(validation_response)
 
-# Read the CSV files using Spark
 pandas_training = pd.read_csv(training_csv)
 pandas_testing = pd.read_csv(testing_csv)
 pandas_validation = pd.read_csv(validation_csv)

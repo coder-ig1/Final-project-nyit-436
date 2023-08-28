@@ -26,9 +26,15 @@ testing_csv = StringIO(testing_response)
 validation_csv = StringIO(validation_response)
 
 # Read the CSV files using Spark
-training = spark.read.csv(training_csv, header=True, inferSchema=True)
-testing = spark.read.csv(testing_csv, header=True, inferSchema=True)
-validation = spark.read.csv(validation_csv, header=True, inferSchema=True)
+pandas_training = pd.read_csv(training_csv)
+pandas_testing = pd.read_csv(testing_csv)
+pandas_validation = pd.read_csv(validation_csv)
+
+# Convert pandas DataFrames to Spark DataFrames
+training = spark.createDataFrame(pandas_training)
+testing = spark.createDataFrame(pandas_testing)
+validation = spark.createDataFrame(pandas_validation)
+
 training.printSchema()
 training.show(5)
 # Define the function to prepare the dataset
